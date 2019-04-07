@@ -1,6 +1,6 @@
 ## Bookstack setup for Raspberry Pi
 
-Setup for running bookstack on Raspberry Pi running Raspbian with automated backups of the database. Uses docker images by [LinuxServer](https://LinuxServer.io).
+Setup for running bookstack on Raspberry Pi running Raspbian with automated backups of the database. Uses docker images by [LinuxServer](https://LinuxServer.io) and the script [wait-for-it](https://github.com/vishnubob/wait-for-it).
 
 ### Requirements
 
