@@ -1,0 +1,49 @@
+version: '3'
+services:
+
+# Takes a while to actually start, will give you a db connection error at first and after 5min or so it restarts the bookstack server and then works
+
+  #MySQL/MariaDB Service
+  bookstack_db:
+    image: linuxserver/mariadb
+    container_name: bookstack_db_container
+    restart: unless-stopped   # even restarts on reboot!
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - MYSQL_DATABASE=bookstackapp
+      - MYSQL_ROOT_PASSWORD=__root_password__
+      - MYSQL_USER=bookstack_user
+      - MYSQL_PASSWORD=__user_password__
+    volumes:
+      - ./data/sql:/config
+      - ./init.sql:/docker-entrypoint-initdb.d  # all .sh and .sql files in this folder will be executed when container is started for the first time
+    networks:
+      - bookstack-network
+
+  bookstack:
+    image: linuxserver/bookstack
+    container_name: bookstack_container
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - DB_HOST=bookstack_db:3306
+      - DB_USER=bookstack_user
+      - DB_PASS=__user_password__
+      - DB_DATABASE=bookstackapp
+    volumes:
+      - ./bookstack_config:/config
+    ports:
+      - "6875:80"  # map 80 in container to 6875 in host machine  <external>:<internal>
+    depends_on:
+      - bookstack_db
+    restart: unless-stopped
+    networks:
+      - bookstack-network
+
+#Docker Networks
+networks:
+  bookstack-network:
