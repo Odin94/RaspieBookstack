@@ -22,4 +22,4 @@ sed "s/__root_password__/${mysql_root_password}/g;" $dir/templates/restore_templ
 chmod +x $dir/$scripts_dir/backup.sh
 chmod +x $dir/$scripts_dir/restore.sh
 
-echo "done. You can now run docker-compose up in \'$bookstack_dir\'"
+echo "done. You can now run docker-compose up in '$bookstack_dir'"
