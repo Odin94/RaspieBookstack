@@ -37,16 +37,15 @@ services:
     volumes:
       - ./bookstack_config:/config
       - ../wait-for-it.sh:/wait-for-it.sh
-      - ../sleep-before-init.sh:/sleep-before-init.sh
+      - ../sleep-and-init.sh:/sleep-and-init.sh
     ports:
       - "6875:80"  # map 80 in container to 6875 in host machine  <external>:<internal>
     depends_on: 
       - "bookstack_db"
     command:
-      - "/wait-for-it.sh"
-      - "bookstack_db:3306"
-      - "--"
-      - "/sleep-before-init.sh"
+      - sh
+      - -c
+      - "/wait-for-it.sh bookstack_db:3306 --timeout=60 -- /sleep-and-init.sh"
     entrypoint: []
     restart: unless-stopped
     networks:
